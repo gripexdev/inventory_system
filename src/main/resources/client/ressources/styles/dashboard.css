@@ -1,0 +1,50 @@
+/* General Styling */
+.label {
+    -fx-font-family: "Arial";
+    -fx-text-fill: #333;
+}
+
+/* Button Styling */
+.button {
+    -fx-cursor: hand;
+    -fx-font-family: "Arial";
+    -fx-font-size: 13px;
+    -fx-background-radius: 15;
+    -fx-text-fill: white;
+    -fx-background-color: #4A68B1;
+}
+
+.button:hover {
+    -fx-background-color: #263F77;
+}
+
+/* Sidebar Buttons */
+#manageProductsButton, #reportsButton, #settingsButton {
+    -fx-text-fill: white;
+    -fx-font-family: "Arial";
+    -fx-font-size: 14px;
+}
+
+#manageProductsButton:hover, #reportsButton:hover, #settingsButton:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 5;
+}
+
+/* Table Styling */
+.table-view {
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #4A68B1;
+}
+
+.table-column {
+    -fx-alignment: CENTER;
+    -fx-font-family: "Arial";
+}
+
+/* Search Field */
+.text-field {
+    -fx-background-color: white;
+    -fx-border-radius: 15;
+    -fx-border-color: #4A68B1;
+}

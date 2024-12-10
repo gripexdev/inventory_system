@@ -1,5 +1,6 @@
 package server;
 
+import server.models.User;
 import server.service.InventoryService;
 import server.service.InventoryServiceImpl;
 import server.service.UserService;

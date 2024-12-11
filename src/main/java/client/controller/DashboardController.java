@@ -5,13 +5,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import server.auth.UserSession;
 import server.models.Product;
 import server.service.InventoryService;
+import server.service.LogService;
+import server.service.LogServiceImpl;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.sql.Timestamp;
 
 public class DashboardController {
     @FXML
@@ -29,8 +33,11 @@ public class DashboardController {
 
     private InventoryService inventoryService;
 
+    private LogService logService;
+
     public DashboardController() throws MalformedURLException, NotBoundException, RemoteException {
         inventoryService = (InventoryService) Naming.lookup("rmi://localhost:1099/InventoryService");
+        logService = new LogServiceImpl();
     }
 
     @FXML
@@ -47,6 +54,9 @@ public class DashboardController {
         try {
             productsTable.getItems().clear();
             productsTable.getItems().addAll(inventoryService.searchProducts(""));
+
+            logService.addLog(UserSession.getInstance().getName(), "Affichage de la liste des produits", new Timestamp(System.currentTimeMillis()));
+
         } catch (RemoteException e) {
             e.printStackTrace();
         }

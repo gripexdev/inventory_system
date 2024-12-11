@@ -11,8 +11,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import server.auth.UserSession;
 import server.models.User;
 import server.service.InventoryService;
+import server.service.LogService;
+import server.service.LogServiceImpl;
 import server.service.UserService;
 
 import java.io.IOException;
@@ -23,6 +26,7 @@ import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
 
 public class LoginController {
     @FXML
@@ -39,7 +43,10 @@ public class LoginController {
     InventoryService service = (InventoryService) Naming.lookup("rmi://localhost:1099/InventoryService");
     UserService userService = (UserService) Naming.lookup("rmi://localhost:1099/UserService");
 
+    private LogService logService;
+
     public LoginController() throws MalformedURLException, NotBoundException, RemoteException {
+        logService = new LogServiceImpl();
     }
 
 
@@ -49,13 +56,17 @@ public class LoginController {
             if(user != null){
                 errorLabel.setText("User Found" );
                 try {
+
+                    UserSession.getInstance().setName(user.getName());
+                    logService.addLog(UserSession.getInstance().getName(), "Authentification", new Timestamp(System.currentTimeMillis()));
+
+
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/client/ressources/dashboard.fxml"));
                     Parent root = fxmlLoader.load();
                     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                     Scene scene = new Scene(root);
                     stage.setScene(scene);
                     stage.show();
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -72,29 +83,4 @@ public class LoginController {
             errorLabel.setText("Veuillez Entrer un email & mot de passe !");
         }
     }
-
-
-//    public void validateLogin(){
-//        DatabaseConnection connection = new DatabaseConnection();
-//        Connection connectDB = connection.getConnection();
-//
-//        String testSelect = "SELECT * FROM users";
-//
-//        try{
-//            Statement statement = connectDB.createStatement();
-//            ResultSet resultSet = statement.executeQuery(testSelect);
-//
-//            while(resultSet.next()){
-//                int id = resultSet.getInt("id");
-//                String username = resultSet.getString("name");
-//                String email = resultSet.getString("email");
-//                String password = resultSet.getString("password");
-//
-//                System.out.println("ID: " + id + ", Username: " + username + ", Email: " + email + ", Password : " + password);
-//            }
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
-//    }
-
 }

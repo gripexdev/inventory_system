@@ -46,7 +46,7 @@
    </AnchorPane>
 
    <AnchorPane layoutX="200.0" layoutY="60.0" prefHeight="540.0" prefWidth="600.0">
-      <TextField fx:id="searchField" layoutX="20.0" layoutY="20.0" prefHeight="30.0" prefWidth="400.0" promptText="Search products..." style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-border-color: #263F77;">
+      <TextField fx:id="searchField" layoutX="20.0" layoutY="20.0" prefHeight="30.0" prefWidth="400.0" promptText="Search products..." style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-border-color: #263F77;" onKeyReleased="#onSearchKeyReleased">
          <font>
             <Font size="13.0" />
          </font>

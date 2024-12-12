@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import server.auth.UserSession;
@@ -35,6 +36,8 @@ public class DashboardController {
     private TableColumn<Product, Integer> quantityColumn;
     @FXML
     private TableColumn<Product, Double> priceColumn;
+    @FXML
+    private TextField searchField;
     @FXML
     private Button addButton, updateButton, deleteButton, logoutButton;
 
@@ -90,6 +93,20 @@ public class DashboardController {
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void onSearchKeyReleased() {
+        String query = searchField.getText();
+        try {
+            productsTable.getItems().clear();
+            productsTable.getItems().addAll(inventoryService.searchProducts(query));
+
+            // Log the search action
+            logService.addLog(UserSession.getInstance().getName(), "Search performed: " + query, new Timestamp(System.currentTimeMillis()));
+        } catch (RemoteException e) {
             e.printStackTrace();
         }
     }

@@ -1,16 +1,23 @@
 package client.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import server.auth.UserSession;
 import server.models.Product;
 import server.service.InventoryService;
 import server.service.LogService;
 import server.service.LogServiceImpl;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -58,6 +65,31 @@ public class DashboardController {
             logService.addLog(UserSession.getInstance().getName(), "Affichage de la liste des produits", new Timestamp(System.currentTimeMillis()));
 
         } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void logout(ActionEvent event) {
+        try {
+            // Clear the user session
+            String username = UserSession.getInstance().getName();
+            UserSession.getInstance().setName(null);
+
+            // Get the current timestamp
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+            // Log the logout action
+            logService.addLog(username, "User logged out", timestamp);
+
+            // Navigate to the login page
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/client/ressources/login.fxml"));
+            Parent root = fxmlLoader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

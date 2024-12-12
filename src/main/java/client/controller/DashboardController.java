@@ -1,5 +1,6 @@
 package client.controller;
 
+import client.util.LogoutHelper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -74,27 +75,8 @@ public class DashboardController {
 
     @FXML
     public void logout(ActionEvent event) {
-        try {
-            // Clear the user session
-            String username = UserSession.getInstance().getName();
-            UserSession.getInstance().setName(null);
-
-            // Get the current timestamp
-            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-
-            // Log the logout action
-            logService.addLog(username, "User logged out", timestamp);
-
-            // Navigate to the login page
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/client/ressources/login.fxml"));
-            Parent root = fxmlLoader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String username = UserSession.getInstance().getName();
+        LogoutHelper.logout(username, event);
     }
 
     @FXML

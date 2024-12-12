@@ -1,5 +1,6 @@
 package client.controller;
 
+import client.util.LogoutHelper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -129,21 +130,8 @@ public class AddProductController implements Initializable {
 
     @FXML
     public void logout(ActionEvent event) {
-        try {
-            String username = UserSession.getInstance().getName();
-            UserSession.getInstance().setName(null);
-            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-            logService.addLog(username, "User logged out", timestamp);
-
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/client/ressources/login.fxml"));
-            Parent root = fxmlLoader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String username = UserSession.getInstance().getName();
+        LogoutHelper.logout(username, event);
     }
 
     private void showAlert(String title, String content, Alert.AlertType alertType) {

@@ -51,7 +51,7 @@
             <Font size="13.0" />
          </font>
       </TextField>
-      <Button fx:id="addProductButton" layoutX="450.0" layoutY="20.0" mnemonicParsing="false" style="-fx-background-color: #4A68B1; -fx-background-radius: 15;" text="Add Product" textFill="WHITE">
+      <Button fx:id="addProductButton" layoutX="450.0" layoutY="20.0" mnemonicParsing="false" style="-fx-background-color: #4A68B1; -fx-background-radius: 15;" text="Add Product" textFill="WHITE" onAction="#goToAddProduct">
          <font>
             <Font size="13.0" />
          </font>

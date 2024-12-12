@@ -110,4 +110,18 @@ public class DashboardController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private void goToAddProduct(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/ressources/addProduct.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

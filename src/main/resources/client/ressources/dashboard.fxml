@@ -28,17 +28,12 @@
             <Font name="Arial Black" size="16.0" />
          </font>
       </Label>
-      <Button fx:id="manageProductsButton" layoutX="20.0" layoutY="80.0" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Manage Products">
+      <Button fx:id="manageProductsButton" layoutX="20.0" layoutY="80.0" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Produits">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Button fx:id="reportsButton" layoutX="20.0" layoutY="130.0" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Reports">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-      <Button fx:id="settingsButton" layoutX="20.0" layoutY="180.0" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Settings">
+      <Button fx:id="logsButton" layoutX="20.0" layoutY="130.0" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Logs" onAction="#loadLogs">
          <font>
             <Font size="14.0" />
          </font>

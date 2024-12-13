@@ -16,6 +16,8 @@ public class Main extends Application {
             System.out.println("FXMLLoader returned null!");
         }
         Scene scene = new Scene(fxmlLoader.load());
+        stage.setFullScreen(false);
+        stage.setResizable(false);
         stage.setTitle("Login Page");
         stage.setScene(scene);
         stage.show();

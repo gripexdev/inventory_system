@@ -28,6 +28,8 @@ import java.sql.Timestamp;
 
 public class DashboardController {
     @FXML
+    public TableColumn idColumn;
+    @FXML
     private TableView<Product> productsTable;
     @FXML
     private TableColumn<Product, String> nameColumn;
@@ -42,6 +44,9 @@ public class DashboardController {
     @FXML
     private Button addButton, updateButton, deleteButton, logoutButton;
 
+    @FXML
+    public Button logsButton;
+
     private InventoryService inventoryService;
 
     private LogService logService;
@@ -53,6 +58,7 @@ public class DashboardController {
 
     @FXML
     public void initialize() {
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
@@ -72,6 +78,25 @@ public class DashboardController {
             e.printStackTrace();
         }
     }
+
+
+    @FXML
+    private void loadLogs(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/client/ressources/logs.fxml"));
+        Parent root = fxmlLoader.load();
+
+        LogController logController = fxmlLoader.getController();
+
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setFullScreen(false);
+        stage.setResizable(false);
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+//        logController.initialize();
+    }
+
+
 
     @FXML
     public void logout(ActionEvent event) {

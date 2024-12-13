@@ -1,8 +1,10 @@
 package server.service;
 
 import server.dao.LogDao;
+import server.models.Log;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 public class LogServiceImpl implements LogService{
 
@@ -20,4 +22,16 @@ public class LogServiceImpl implements LogService{
             e.printStackTrace();
         }
     }
+
+    @Override
+    public List<Log> getLogs(String query) {
+        List<Log> logs = null;
+        try{
+            logs = logDao.getLogs(query);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return logs;
+    }
+
 }

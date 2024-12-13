@@ -1,10 +1,10 @@
 package server.dao;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import server.models.Log;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LogDao {
 
@@ -15,6 +15,29 @@ public class LogDao {
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
+
+    public List<Log> getLogs(String query){
+        String sql = "SELECT * FROM logs WHERE user LIKE ? OR action LIKE ?";
+        List<Log> logs = new ArrayList<>();
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, "%" + query + "%");
+            stmt.setString(2, "%" + query + "%");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Log log = new Log(
+                        rs.getInt("id"),
+                        rs.getString("user"),
+                        rs.getString("action"),
+                        rs.getTimestamp("createdAt")
+                );
+                logs.add(log);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return logs;
+    }
+
 
     public void addLog(String user, String action, Timestamp createdAt) throws SQLException {
         try{

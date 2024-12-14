@@ -7,10 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import server.auth.UserSession;
@@ -45,6 +42,10 @@ public class DashboardController {
     private Button addButton, updateButton, deleteButton, logoutButton;
 
     @FXML
+    private TableColumn<Product, Void> actionColumn;
+
+
+    @FXML
     public Button logsButton;
 
     private InventoryService inventoryService;
@@ -63,6 +64,30 @@ public class DashboardController {
         categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+        // add the Delete button for every product
+        actionColumn.setCellFactory(col -> new TableCell<>() {
+            private final Button deleteButton = new Button("Delete");
+
+            {
+                deleteButton.setStyle("-fx-background-color: red; -fx-text-fill: white; -fx-background-radius: 5;");
+                deleteButton.setOnAction(event -> {
+                    Product product = getTableView().getItems().get(getIndex());
+                    onDeleteProduct(product); // Call delete method
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(deleteButton);
+                }
+            }
+        });
+
 
         loadProducts();
     }
@@ -130,5 +155,29 @@ public class DashboardController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private void onDeleteProduct(Product product) {
+        if (product == null) return;
+
+        // Show confirmation dialog
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Product");
+        alert.setHeaderText(null);
+        alert.setContentText("Are you sure you want to delete product with name: " + product.getName() + "?");
+
+        if (alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
+            try {
+                inventoryService.deleteProduct(product.getId());
+                logService.addLog(UserSession.getInstance().getName(),
+                        "Deleted product: " + product.getName(),
+                        new Timestamp(System.currentTimeMillis()));
+                loadProducts(); // Refresh product list
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
 }

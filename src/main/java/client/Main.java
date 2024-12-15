@@ -3,6 +3,7 @@ package client;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -18,7 +19,11 @@ public class Main extends Application {
         Scene scene = new Scene(fxmlLoader.load());
         stage.setFullScreen(false);
         stage.setResizable(false);
-        stage.setTitle("Login Page");
+        stage.setTitle("Inventory Management");
+
+        Image icon = new Image(getClass().getResource("/client/ressources/logo.png").toExternalForm());
+        stage.getIcons().add(icon);
+
         stage.setScene(scene);
         stage.show();
 

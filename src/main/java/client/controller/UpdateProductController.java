@@ -4,6 +4,7 @@ import client.util.LogoutHelper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -16,6 +17,7 @@ import server.service.InventoryService;
 import server.service.LogService;
 import server.service.LogServiceImpl;
 
+import java.io.IOException;
 import java.rmi.Naming;
 import java.sql.Timestamp;
 
@@ -122,7 +124,7 @@ public class UpdateProductController {
 
             // Proceed with updating the product
             try {
-
+                // get the actual username
                 String username = UserSession.getInstance().getName();
 
                 // Log the old data
@@ -186,5 +188,20 @@ public class UpdateProductController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void loadLogs(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/client/ressources/logs.fxml"));
+        Parent root = fxmlLoader.load();
+
+        LogController logController = fxmlLoader.getController();
+
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setFullScreen(false);
+        stage.setResizable(false);
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 }

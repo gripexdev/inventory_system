@@ -154,4 +154,20 @@ public class AddProductController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         // Optionally initialize some data here if needed
     }
+
+    @FXML
+    private void loadLogs(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/client/ressources/logs.fxml"));
+        Parent root = fxmlLoader.load();
+
+        LogController logController = fxmlLoader.getController();
+
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setFullScreen(false);
+        stage.setResizable(false);
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
 }

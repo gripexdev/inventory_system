@@ -26,9 +26,16 @@
                 <Font name="Arial Black" size="16.0" />
             </font>
         </Label>
-        <Button layoutX="20.0" layoutY="80.0" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Manage Products" />
-        <Button layoutX="20.0" layoutY="130.0" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Reports" />
-        <Button layoutX="20.0" layoutY="180.0" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Settings" />
+        <Button fx:id="manageProductsButton" layoutX="20.0" layoutY="80.0" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Produits" onAction="#cancel">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+        <Button fx:id="logsButton" layoutX="20.0" layoutY="130.0" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Logs" onAction="#loadLogs">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
     </AnchorPane>
 
     <AnchorPane layoutX="200.0" layoutY="60.0" prefHeight="540.0" prefWidth="600.0">

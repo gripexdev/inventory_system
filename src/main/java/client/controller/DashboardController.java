@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import server.auth.UserSession;
 import server.models.Product;
@@ -68,12 +69,21 @@ public class DashboardController {
         // add the Delete button for every product
         actionColumn.setCellFactory(col -> new TableCell<>() {
             private final Button deleteButton = new Button("Delete");
+            private final Button updateButton = new Button("Update");
 
             {
+                // Style and functionality for Delete button
                 deleteButton.setStyle("-fx-background-color: red; -fx-text-fill: white; -fx-background-radius: 5;");
                 deleteButton.setOnAction(event -> {
                     Product product = getTableView().getItems().get(getIndex());
-                    onDeleteProduct(product); // Call delete method
+                    onDeleteProduct(product);
+                });
+
+                // Style and functionality for Update button
+                updateButton.setStyle("-fx-background-color: blue; -fx-text-fill: white; -fx-background-radius: 5;");
+                updateButton.setOnAction(event -> {
+                    Product product = getTableView().getItems().get(getIndex());
+                    goToUpdateProduct(product); // Navigate to update page
                 });
             }
 
@@ -83,10 +93,12 @@ public class DashboardController {
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    setGraphic(deleteButton);
+                    // Add both buttons in a horizontal layout
+                    setGraphic(new HBox(5, deleteButton, updateButton));
                 }
             }
         });
+
 
 
         loadProducts();
@@ -179,5 +191,24 @@ public class DashboardController {
         }
     }
 
+    @FXML
+    private void goToUpdateProduct(Product product) {
+        try {
+            // Load the update product FXML
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/ressources/updateProduct.fxml"));
+            Parent root = loader.load();
+
+            // Get the controller of the update page and pass the product
+            UpdateProductController updateProductController = loader.getController();
+            updateProductController.setProductDetails(product);
+
+            // Navigate to the update page
+            Stage stage = (Stage) productsTable.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

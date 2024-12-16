@@ -7,7 +7,9 @@ import java.util.List;
 
 public interface LogService {
 
+    // Méthode pour ajouter un log
     void addLog(String user, String action, Timestamp createdAt);
-    List<Log> getLogs(String query);
 
+    // Méthode pour obtenir une liste de logs en fonction d'une requête
+    List<Log> getLogs(String query);
 }

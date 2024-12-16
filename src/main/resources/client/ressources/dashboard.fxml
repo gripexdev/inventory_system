@@ -10,12 +10,12 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #F3F4F6;" stylesheets="styles/dashboard.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.controller.DashboardController">
    <AnchorPane prefHeight="60.0" prefWidth="820.0" style="-fx-background-color: linear-gradient(to right, #263F77, #4A68B1);">
-      <Label layoutX="20.0" layoutY="15.0" text="Dashboard" textFill="WHITE">
+      <Label layoutX="20.0" layoutY="15.0" text="Tableau de bord" textFill="WHITE">
          <font>
             <Font name="Arial Black" size="20.0" />
          </font>
       </Label>
-      <Button fx:id="logoutButton" layoutX="700.0" layoutY="15.0" mnemonicParsing="false" onAction="#logout" style="-fx-background-color: #FF6B6B; -fx-background-radius: 15;" text="Logout" textFill="WHITE">
+      <Button fx:id="logoutButton" layoutX="700.0" layoutY="15.0" mnemonicParsing="false" onAction="#logout" style="-fx-background-color: #FF6B6B; -fx-background-radius: 15;" text="Déconnexion" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
@@ -41,12 +41,12 @@
    </AnchorPane>
 
    <AnchorPane layoutX="200.0" layoutY="60.0" prefHeight="540.0" prefWidth="600.0">
-      <TextField fx:id="searchField" layoutX="20.0" layoutY="20.0" onKeyReleased="#onSearchKeyReleased" prefHeight="30.0" prefWidth="400.0" promptText="Search products..." style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-border-color: #263F77;">
+      <TextField fx:id="searchField" layoutX="20.0" layoutY="20.0" onKeyReleased="#onSearchKeyReleased" prefHeight="30.0" prefWidth="400.0" promptText="Rechercher des produits..." style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-border-color: #263F77;">
          <font>
             <Font size="13.0" />
          </font>
       </TextField>
-      <Button fx:id="addProductButton" layoutX="450.0" layoutY="20.0" mnemonicParsing="false" onAction="#goToAddProduct" style="-fx-background-color: #4A68B1; -fx-background-radius: 15;" text="Add Product" textFill="WHITE">
+      <Button fx:id="addProductButton" layoutX="450.0" layoutY="20.0" mnemonicParsing="false" onAction="#goToAddProduct" style="-fx-background-color: #4A68B1; -fx-background-radius: 15;" text="Ajouter un produit" textFill="WHITE">
          <font>
             <Font size="13.0" />
          </font>
@@ -55,10 +55,10 @@
       <TableView fx:id="productsTable" layoutX="10.0" layoutY="82.0" prefHeight="420.0" prefWidth="600.0" style="-fx-background-radius: 10; -fx-border-radius: 10;">
          <columns>
             <TableColumn fx:id="idColumn" minWidth="0.0" prefWidth="39.0" text="ID" />
-            <TableColumn fx:id="nameColumn" prefWidth="156.0" text="Nom Produit" />
+            <TableColumn fx:id="nameColumn" prefWidth="156.0" text="Nom du produit" />
             <TableColumn fx:id="priceColumn" prefWidth="65.0" text="Prix" />
             <TableColumn fx:id="quantityColumn" prefWidth="95.0" text="Quantité" />
-            <TableColumn fx:id="categoryColumn" prefWidth="99.0" text="Categorie" />
+            <TableColumn fx:id="categoryColumn" prefWidth="99.0" text="Catégorie" />
             <TableColumn fx:id="actionColumn" maxWidth="3000.0" prefWidth="144.0" text="Actions" />
          </columns>
       </TableView>

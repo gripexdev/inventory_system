@@ -15,16 +15,17 @@ import java.sql.Timestamp;
 public class LogoutHelper {
     private static LogService logService = new LogServiceImpl();
 
+    // Méthode pour déconnecter l'utilisateur
     public static void logout(String username, javafx.event.ActionEvent event) {
         try {
-            // Clear the user session
+            // Effacer la session de l'utilisateur
             UserSession.getInstance().setName(null);
 
-            // Log the logout action
+            // Enregistrer l'action de déconnexion dans les journaux
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-            logService.addLog(username, "User logged out", timestamp);
+            logService.addLog(username, "Utilisateur déconnecté", timestamp);
 
-            // Navigate to the login page
+            // Rediriger vers la page de connexion
             FXMLLoader fxmlLoader = new FXMLLoader(LogoutHelper.class.getResource("/client/ressources/login.fxml"));
             Parent root = fxmlLoader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

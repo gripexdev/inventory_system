@@ -22,6 +22,7 @@ import java.rmi.Naming;
 import java.sql.Timestamp;
 
 public class UpdateProductController {
+
     @FXML
     private TextField nameField;
     @FXML
@@ -39,30 +40,34 @@ public class UpdateProductController {
 
     private Product currentProduct;
 
+    // Constructeur de la classe
     public UpdateProductController() throws Exception {
         inventoryService = (InventoryService) Naming.lookup("rmi://localhost:1099/InventoryService");
         logService = new LogServiceImpl();
     }
 
+    // Méthode pour initialiser les détails du produit
     public void setProductDetails(Product product) {
         this.currentProduct = product;
 
-        // Pre-fill the form fields with product details
+        // Remplir les champs du formulaire avec les détails du produit
         nameField.setText(product.getName());
         priceField.setText(String.valueOf(product.getPrice()));
         quantityField.setText(String.valueOf(product.getQuantity()));
         categoryField.setText(product.getCategory());
     }
 
+    // Méthode de déconnexion
     @FXML
     public void logout(ActionEvent event) {
         String username = UserSession.getInstance().getName();
         LogoutHelper.logout(username, event);
     }
 
+    // Méthode pour mettre à jour le produit
     @FXML
     private void onUpdateProduct() {
-        // Clear all previous error messages
+        // Réinitialiser les messages d'erreur
         clearErrorLabels();
 
         boolean isValid = true;
@@ -72,14 +77,14 @@ public class UpdateProductController {
         String priceText = priceField.getText();
         String quantityText = quantityField.getText();
 
-        // Validate each field and update error labels
+        // Validation de chaque champ et mise à jour des étiquettes d'erreur
         if (name == null || name.trim().isEmpty()) {
-            nameErrorLabel.setText("Product name is required.");
+            nameErrorLabel.setText("Le nom du produit est requis.");
             isValid = false;
         }
 
         if (category == null || category.trim().isEmpty()) {
-            categoryErrorLabel.setText("Category is required.");
+            categoryErrorLabel.setText("La catégorie est requise.");
             isValid = false;
         }
 
@@ -87,11 +92,11 @@ public class UpdateProductController {
         try {
             price = Double.parseDouble(priceText);
             if (price < 0) {
-                priceErrorLabel.setText("Price must be a positive number.");
+                priceErrorLabel.setText("Le prix doit être un nombre positif.");
                 isValid = false;
             }
         } catch (NumberFormatException e) {
-            priceErrorLabel.setText("Enter a valid price.");
+            priceErrorLabel.setText("Entrez un prix valide.");
             isValid = false;
         }
 
@@ -99,39 +104,39 @@ public class UpdateProductController {
         try {
             quantity = Integer.parseInt(quantityText);
             if (quantity < 0) {
-                quantityErrorLabel.setText("Quantity must be a positive integer.");
+                quantityErrorLabel.setText("La quantité doit être un entier positif.");
                 isValid = false;
             }
         } catch (NumberFormatException e) {
-            quantityErrorLabel.setText("Enter a valid quantity.");
+            quantityErrorLabel.setText("Entrez une quantité valide.");
             isValid = false;
         }
 
-        // Check if the new data is identical to the old data
+        // Vérifier si les nouvelles données sont identiques aux anciennes
         if (isValid) {
             if (name.equals(currentProduct.getName()) &&
                     category.equals(currentProduct.getCategory()) &&
                     price == currentProduct.getPrice() &&
                     quantity == currentProduct.getQuantity()) {
 
-                // Show error message if data is the same
+                // Afficher un message d'erreur si aucune modification n'est détectée
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setContentText("No changes detected. The product data is the same as before.");
+                alert.setTitle("Erreur");
+                alert.setContentText("Aucune modification détectée. Les données du produit sont identiques.");
                 alert.showAndWait();
                 return;
             }
 
-            // Proceed with updating the product
+            // Procéder à la mise à jour du produit
             try {
-                // get the actual username
+                // obtenir le nom d'utilisateur actuel
                 String username = UserSession.getInstance().getName();
 
-                // Log the old data
-                String oldData = String.format("Old Data - Name: %s, Category: %s, Price: %.2f, Quantity: %d",
+                // Journaliser les anciennes données
+                String oldData = String.format("Anciennes données - Nom: %s, Catégorie: %s, Prix: %.2f, Quantité: %d",
                         currentProduct.getName(), currentProduct.getCategory(), currentProduct.getPrice(), currentProduct.getQuantity());
 
-                // Update the product
+                // Mettre à jour le produit
                 currentProduct.setName(name);
                 currentProduct.setCategory(category);
                 currentProduct.setPrice(price);
@@ -145,31 +150,32 @@ public class UpdateProductController {
                         currentProduct.getPrice()
                 );
 
-                // Log the changes
-                String newData = String.format("New Data - Name: %s, Category: %s, Price: %.2f, Quantity: %d",
+                // Journaliser les nouvelles données
+                String newData = String.format("Nouvelles données - Nom: %s, Catégorie: %s, Prix: %.2f, Quantité: %d",
                         name, category, price, quantity);
-                String logMessage = String.format("Product updated successfully.\n%s\n%s", oldData, newData);
+                String logMessage = String.format("Produit mis à jour avec succès.\n%s\n%s", oldData, newData);
                 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
                 logService.addLog(username, logMessage, timestamp);
 
-                // Show success message
+                // Afficher un message de succès
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Success");
-                alert.setContentText("Product updated successfully!");
+                alert.setTitle("Succès");
+                alert.setContentText("Produit mis à jour avec succès !");
                 alert.showAndWait();
 
-                // Return to dashboard
+                // Retour au tableau de bord
                 returnToDashboard();
             } catch (Exception e) {
                 e.printStackTrace();
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setContentText("Failed to update product. Please try again.");
+                alert.setTitle("Erreur");
+                alert.setContentText("Échec de la mise à jour du produit. Veuillez réessayer.");
                 alert.showAndWait();
             }
         }
     }
 
+    // Méthode pour réinitialiser les étiquettes d'erreur
     private void clearErrorLabels() {
         nameErrorLabel.setText("");
         categoryErrorLabel.setText("");
@@ -177,6 +183,7 @@ public class UpdateProductController {
         quantityErrorLabel.setText("");
     }
 
+    // Méthode pour retourner au tableau de bord
     @FXML
     private void returnToDashboard() {
         try {
@@ -190,6 +197,7 @@ public class UpdateProductController {
         }
     }
 
+    // Méthode pour charger les journaux
     @FXML
     private void loadLogs(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/client/ressources/logs.fxml"));

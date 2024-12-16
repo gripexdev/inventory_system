@@ -15,7 +15,7 @@
                 <Font name="Arial Black" size="20.0" />
             </font>
         </Label>
-        <Button fx:id="logoutButton" layoutX="700.0" layoutY="15.0" mnemonicParsing="false" onAction="#logout" style="-fx-background-color: #FF6B6B; -fx-background-radius: 15;" text="Logout" textFill="WHITE">
+        <Button fx:id="logoutButton" layoutX="700.0" layoutY="15.0" mnemonicParsing="false" onAction="#logout" style="-fx-background-color: #FF6B6B; -fx-background-radius: 15;" text="Se déconnecter" textFill="WHITE">
             <font>
                 <Font name="System Bold" size="12.0" />
             </font>
@@ -46,7 +46,7 @@
                 <TableColumn fx:id="logIdColumn" prefWidth="67.0" text="ID" />
                 <TableColumn fx:id="logUserColumn" prefWidth="198.0" text="Utilisateur" />
                 <TableColumn fx:id="logActionColumn" prefWidth="168.0" text="Action" />
-                <TableColumn fx:id="logCreatedAtColumn" prefWidth="165.0" text="Crée Le" />
+                <TableColumn fx:id="logCreatedAtColumn" prefWidth="165.0" text="Créé Le" />
             </columns>
         </TableView>
     </AnchorPane>

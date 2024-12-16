@@ -25,6 +25,7 @@ import java.rmi.RemoteException;
 import java.sql.Timestamp;
 
 public class DashboardController {
+    // Déclaration des colonnes de la table pour afficher les produits
     @FXML
     public TableColumn idColumn;
     @FXML
@@ -38,21 +39,20 @@ public class DashboardController {
     @FXML
     private TableColumn<Product, Double> priceColumn;
     @FXML
-    private TextField searchField;
+    private TextField searchField; // Champ de recherche
     @FXML
-    private Button addButton, updateButton, deleteButton, logoutButton;
-
-    @FXML
-    private TableColumn<Product, Void> actionColumn;
-
+    private Button addButton, updateButton, deleteButton, logoutButton; // Boutons d'action
 
     @FXML
-    public Button logsButton;
+    private TableColumn<Product, Void> actionColumn; // Colonne pour les actions (mise à jour et suppression)
 
-    private InventoryService inventoryService;
+    @FXML
+    public Button logsButton; // Bouton pour afficher les logs
 
-    private LogService logService;
+    private InventoryService inventoryService; // Service pour gérer l'inventaire
+    private LogService logService; // Service pour gérer les logs
 
+    // Constructeur pour initialiser les services via RMI
     public DashboardController() throws MalformedURLException, NotBoundException, RemoteException {
         inventoryService = (InventoryService) Naming.lookup("rmi://localhost:1099/InventoryService");
         logService = new LogServiceImpl();
@@ -60,30 +60,31 @@ public class DashboardController {
 
     @FXML
     public void initialize() {
+        // Initialisation des colonnes de la table avec les données des produits
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
 
-        // add the Delete button for every product
+        // Ajout de boutons d'action (mise à jour et suppression) pour chaque produit
         actionColumn.setCellFactory(col -> new TableCell<>() {
-            private final Button deleteButton = new Button("Delete");
-            private final Button updateButton = new Button("Update");
+            private final Button deleteButton = new Button("Delete"); // Bouton de suppression
+            private final Button updateButton = new Button("Update"); // Bouton de mise à jour
 
             {
-                // Style and functionality for Delete button
+                // Style et fonctionnalité pour le bouton de suppression
                 deleteButton.setStyle("-fx-background-color: red; -fx-text-fill: white; -fx-background-radius: 5;");
                 deleteButton.setOnAction(event -> {
                     Product product = getTableView().getItems().get(getIndex());
-                    onDeleteProduct(product);
+                    onDeleteProduct(product); // Action de suppression
                 });
 
-                // Style and functionality for Update button
+                // Style et fonctionnalité pour le bouton de mise à jour
                 updateButton.setStyle("-fx-background-color: blue; -fx-text-fill: white; -fx-background-radius: 5;");
                 updateButton.setOnAction(event -> {
                     Product product = getTableView().getItems().get(getIndex());
-                    goToUpdateProduct(product); // Navigate to update page
+                    goToUpdateProduct(product); // Navigation vers la page de mise à jour
                 });
             }
 
@@ -93,22 +94,22 @@ public class DashboardController {
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    // Add both buttons in a horizontal layout
+                    // Ajout des boutons dans une disposition horizontale
                     setGraphic(new HBox(5, deleteButton, updateButton));
                 }
             }
         });
 
-
-
-        loadProducts();
+        loadProducts(); // Chargement initial des produits
     }
 
+    // Fonction pour charger les produits dans la table
     private void loadProducts() {
         try {
             productsTable.getItems().clear();
             productsTable.getItems().addAll(inventoryService.searchProducts(""));
 
+            // Ajout d'un log pour l'affichage des produits
             logService.addLog(UserSession.getInstance().getName(), "Affichage de la liste des produits", new Timestamp(System.currentTimeMillis()));
 
         } catch (RemoteException e) {
@@ -116,7 +117,7 @@ public class DashboardController {
         }
     }
 
-
+    // Fonction pour afficher les logs
     @FXML
     private void loadLogs(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/client/ressources/logs.fxml"));
@@ -130,17 +131,16 @@ public class DashboardController {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-//        logController.initialize();
     }
 
-
-
+    // Fonction pour déconnecter l'utilisateur
     @FXML
     public void logout(ActionEvent event) {
         String username = UserSession.getInstance().getName();
         LogoutHelper.logout(username, event);
     }
 
+    // Fonction pour effectuer une recherche en temps réel
     @FXML
     private void onSearchKeyReleased() {
         String query = searchField.getText();
@@ -148,13 +148,14 @@ public class DashboardController {
             productsTable.getItems().clear();
             productsTable.getItems().addAll(inventoryService.searchProducts(query));
 
-            // Log the search action
-            logService.addLog(UserSession.getInstance().getName(), "Search performed: " + query, new Timestamp(System.currentTimeMillis()));
+            // Ajout d'un log pour la recherche
+            logService.addLog(UserSession.getInstance().getName(), "Recherche: " + query, new Timestamp(System.currentTimeMillis()));
         } catch (RemoteException e) {
             e.printStackTrace();
         }
     }
 
+    // Fonction pour naviguer vers la page d'ajout de produit
     @FXML
     private void goToAddProduct(ActionEvent event) {
         try {
@@ -168,41 +169,43 @@ public class DashboardController {
         }
     }
 
+    // Fonction pour supprimer un produit
     @FXML
     private void onDeleteProduct(Product product) {
         if (product == null) return;
 
-        // Show confirmation dialog
+        // Affichage d'une boîte de dialogue de confirmation
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Delete Product");
+        alert.setTitle("Supprimer Produit");
         alert.setHeaderText(null);
-        alert.setContentText("Are you sure you want to delete product with name: " + product.getName() + "?");
+        alert.setContentText("Veuillez Confirmer la suppression du Produit avec le nom: " + product.getName());
 
         if (alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
             try {
                 inventoryService.deleteProduct(product.getId());
                 logService.addLog(UserSession.getInstance().getName(),
-                        "Deleted product: " + product.getName(),
+                        "Produit Supprimé: " + product.getName(),
                         new Timestamp(System.currentTimeMillis()));
-                loadProducts(); // Refresh product list
+                loadProducts(); // Rafraîchissement de la liste des produits
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
         }
     }
 
+    // Fonction pour naviguer vers la page de mise à jour d'un produit
     @FXML
     private void goToUpdateProduct(Product product) {
         try {
-            // Load the update product FXML
+            // Chargement de la page de mise à jour
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/ressources/updateProduct.fxml"));
             Parent root = loader.load();
 
-            // Get the controller of the update page and pass the product
+            // Transmission des données du produit à mettre à jour
             UpdateProductController updateProductController = loader.getController();
             updateProductController.setProductDetails(product);
 
-            // Navigate to the update page
+            // Navigation vers la page de mise à jour
             Stage stage = (Stage) productsTable.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
@@ -210,5 +213,4 @@ public class DashboardController {
             e.printStackTrace();
         }
     }
-
 }

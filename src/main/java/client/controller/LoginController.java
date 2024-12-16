@@ -23,9 +23,6 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.sql.Timestamp;
 
 public class LoginController {
@@ -49,17 +46,14 @@ public class LoginController {
         logService = new LogServiceImpl();
     }
 
-
     public void login(ActionEvent event) throws MalformedURLException, NotBoundException, RemoteException {
-        if(emailField.getText().isBlank() == false && passwordField.getText().isBlank() == false){
+        if (emailField.getText().isBlank() == false && passwordField.getText().isBlank() == false) {
             User user = userService.findUser(emailField.getText(), passwordField.getText());
-            if(user != null){
-                errorLabel.setText("User Found" );
+            if (user != null) {
+                errorLabel.setText("Utilisateur trouvé");
                 try {
-
                     UserSession.getInstance().setName(user.getName());
                     logService.addLog(UserSession.getInstance().getName(), "Authentification", new Timestamp(System.currentTimeMillis()));
-
 
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/client/ressources/dashboard.fxml"));
                     Parent root = fxmlLoader.load();
@@ -72,17 +66,16 @@ public class LoginController {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-            }else{
-                errorLabel.setText("User Not Found !");
+            } else {
+                errorLabel.setText("Utilisateur non trouvé !");
             }
-        }else{
-            String name = "test name";
-            String category = "test category";
+        } else {
+            String name = "nom test";
+            String category = "catégorie test";
             int quantity = 10;
             double price = 100;
             service.addProduct(name, category, quantity, price);
-            errorLabel.setText("Veuillez Entrer un email & mot de passe !");
+            errorLabel.setText("Veuillez entrer un email et un mot de passe !");
         }
     }
 }

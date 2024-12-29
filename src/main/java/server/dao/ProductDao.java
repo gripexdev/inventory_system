@@ -60,11 +60,12 @@ public class ProductDao {
 
     // Méthode pour rechercher des produits en fonction d'une requête
     public List<Product> searchProducts(String query) {
-        String sql = "SELECT * FROM products WHERE name LIKE ? OR category LIKE ?";
+        String sql = "SELECT * FROM products WHERE name LIKE ? OR category LIKE ? OR CAST(quantity AS CHAR) LIKE ?";
         List<Product> products = new ArrayList<>();
         try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, "%" + query + "%");
             stmt.setString(2, "%" + query + "%");
+            stmt.setString(3, "%" + query + "%"); // Recherche par quantité
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 // Création d'un objet Product pour chaque entrée de la table products
@@ -82,5 +83,6 @@ public class ProductDao {
         }
         return products;
     }
+
 
 }

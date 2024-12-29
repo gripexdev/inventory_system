@@ -155,6 +155,7 @@ public class DashboardController {
         }
     }
 
+
     // Fonction pour naviguer vers la page d'ajout de produit
     @FXML
     private void goToAddProduct(ActionEvent event) {
